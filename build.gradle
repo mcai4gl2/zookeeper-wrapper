@@ -1,0 +1,48 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+group = 'zookeeper.wrapper'
+version = '0.1.0-SNAPSHOT'
+version = '0.1.0-SNAPSHOT'
+
+ext {
+
+}
+
+ext.libraries = [
+        slf4j: 'org.slf4j:slf4j-api:1.7.7',
+        junit: [
+                'junit:junit:4.11',
+                'org.mockito:mockito-all:1.10.8'
+        ]
+]
+
+repositories {
+    mavenCentral()
+}
+
+println "Building ${project.name} ($version) with Gradle [${project.gradle.gradleVersion}], Java [${System.getProperty('java.version')}]"
+
+dependencies {
+    testCompile libraries.junit
+}
+
+jar {
+    destinationDir = file("${buildDir}/output")
+}
+
+jar << {
+    new File(jar.destinationDir.path, "build-info.txt").withWriter {
+        out ->
+            out.writeLine("Project Name: ${project.name}")
+            out.writeLine("Project Version: ${project.version}")
+            out.writeLine("Build Time: " + new Date())
+    }
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
